@@ -7,9 +7,10 @@ def replace_dict_func(language : str = ""):
 
 class text_analyzer:
     #    
-    def __init__ (self, text : str, verbose : bool = True):
+    def __init__ (self, text : str, language : str = "it", verbose : bool = True):
         self._text_raw = text
         self.verbose = verbose
+        self.language = language
         global re
         if "re" not in globals():
             if self.verbose:
@@ -37,7 +38,7 @@ class text_analyzer:
         #
         if self.__none_check(self.__text_processed):
             if self.verbose:
-                print("I am processing the text. Please wait.")
+                print("Please wait: "+"I am processing the text.")
             self.__text_processed = self._text_raw.lower()
             #
             puntuaction_list = set(re.findall(r"\W", self.__text_processed))-{" "}
@@ -63,7 +64,7 @@ class text_analyzer:
         #
         if self.__none_check(self.__text_splitted):
             if self.verbose:
-                print("I am splitting the words. Please wait.")
+                print("Please wait: "+"I am splitting the words.")
             self.__text_splitted = re.split(r" |'", self.__text_processed)
         #
         return self.__text_splitted
@@ -75,7 +76,7 @@ class text_analyzer:
         # 
         if self.__none_check(self.__text_counted):
             if self.verbose: 
-                print("I am counting the words. Please wait.")
+                print("Please wait: "+"I am counting the words.")
             splitted_text = self.__text_splitted
             final_dict = {}
             for word in set(splitted_text):
@@ -90,7 +91,7 @@ class text_analyzer:
             else:
                 return 0
     #        
-    def lemmatize(self, language="it"):
+    def lemmatize(self):
         #
         global simplemma
         if "simplemma" not in globals():
@@ -116,11 +117,11 @@ class text_analyzer:
         #
         if self.__none_check(self.__text_lemmatized):
             if self.verbose:
-                print("I am lemmatizing the text. Please wait.") 
+                print("Please wait: "+"I am lemmatizing the text.") 
             self.__text_lemmatized = dict(self.__text_counted)
             words_list = self.__text_lemmatized.keys()
             #
-            repl_dict = replace_dict_func(language)
+            repl_dict = replace_dict_func(self.language)
             if repl_dict != dict({}):
                 for old_word in list(words_list):
                     new_word = repl_dict.get(old_word, old_word)
@@ -129,7 +130,7 @@ class text_analyzer:
             words_list_lemmatized = []
             words_list_count = []
             for i,word in enumerate(words_list):
-                words_list_lemmatized.append(simplemma.lemmatize(word, lang=language))
+                words_list_lemmatized.append(simplemma.lemmatize(word, lang=self.language))
                 words_list_count.append(self.__text_lemmatized[word])
             #
             self.__text_lemmatized = pd.DataFrame({
@@ -143,18 +144,22 @@ class text_analyzer:
     def lemma_count(self):
         #
         if self.__none_check(self.__text_lemmatized):
-            language = input("Please specify a language (for default press enter): ")
-            if language == '':
-                language = 'it'
-            self.lemmatize(self, language)
+            self.lemmatize(self, self.language)
         #
         if self.__none_check(self.__text_lemma_counted):
             if self.verbose:
-                print("I am counting the lemmas. Please wait.")
+                print("Please wait: "+"I am counting the lemmas.")
             lemma_occurrences = self.__text_lemmatized.groupby("Lemma")["Raw"].unique().reset_index()
             lemma_occurrences.columns = ['Lemma', 'Occurrence']
             lemma_counts = self.__text_lemmatized.groupby("Lemma")["Raw Count"].sum().reset_index()
             lemma_counts.columns = ['Lemma', 'Lemma Count']
             self.__text_lemma_counted = lemma_counts.merge(lemma_occurrences, on = "Lemma")    
         #       
-        return self.__text_lemma_counteds
+        return self.__text_lemma_counted 
+    #
+    def word_count_print(self,word:str):
+        if type(word)!=str:
+            print("The word mut be a string")
+        else:
+            print("The word '"+word+"' occurs",self.word_count(word),"times")
+    
