@@ -183,7 +183,3 @@ class text_analyzer:
                 print("The word mut be a string.")
             else:
                 print("The word '"+word+"' occurs",self.word_count(word),"times.")
-    
-
-
-"pd" in globals()
