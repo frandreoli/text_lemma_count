@@ -17,11 +17,12 @@ class text_analyzer:
                 print("I need the RegEx library. I'm executing 'import re'.")
             import re
         #
-        self.__text_processed     = None
-        self.__text_splitted      = None #Needs __text_processed
-        self.__text_counted       = None #Needs __text_splitted
-        self.__text_lemmatized    = None #Needs __text_counted
-        self.__text_lemma_counted = None #Needs __text_lemmatized
+        self.__text_processed         = None
+        self.__text_splitted          = None #Needs __text_processed
+        self.__text_counted           = None #Needs __text_splitted
+        self.__text_counted_dataframe = None #Needs __text_splitted
+        self.__text_lemmatized        = None #Needs __text_counted
+        self.__text_lemma_counted     = None #Needs __text_lemmatized
     #
     #Retrieve the raw text without allowng for changes
     @property
@@ -33,6 +34,30 @@ class text_analyzer:
     #
     def __none_check(self,variable):
         return type(variable) == type(None)
+    #
+    def __import_simplemma(self):
+        global simplemma
+        if "simplemma" not in globals():
+            if self.verbose:
+                print("I need a lemmatization library. I'm executing 'import simplemma'.")
+            try:
+                import simplemma
+            except Exception as exc:
+                print("Error while importing the simplemma library.\nI cannot lemmatize the words.\nError code: ", exc)
+                return True
+        return False
+    #
+    def __import_pandas(self):
+        global pd
+        if "pd" not in globals():
+            if self.verbose:
+                print("I need pandas. I'm executing 'import pandas'.")
+            try:
+                import pandas as pd
+            except Exception as exc:
+                print("Error while importing the pandas library.\nI cannot lemmatize the words.\nError code: ", exc)
+                return True
+        return False
     #
     def text_process(self):
         #
@@ -69,7 +94,10 @@ class text_analyzer:
         #
         return self.__text_splitted
     #   
-    def word_count(self,key_word = None): 
+    def word_count(self,key_word = None, *, dict = False): 
+        #
+        if self.__import_pandas():
+            return None
         #
         if self.__none_check(self.__text_splitted):
             self.words_split()
@@ -82,9 +110,13 @@ class text_analyzer:
             for word in set(splitted_text):
                 final_dict.update({word:splitted_text.count(word)})
             self.__text_counted = final_dict
+            self.__text_counted_dataframe = pd.DataFrame({"Raw" : final_dict.keys(), "Raw Count" : final_dict.values()})
         #
         if key_word == None:
-            return self.__text_counted
+            if dict:
+                return self.__text_counted
+            else:
+                return self.__text_counted_dataframe
         else:
             if key_word in self.__text_counted.keys():
                 return self.__text_counted[key_word]
@@ -93,24 +125,10 @@ class text_analyzer:
     #        
     def lemmatize(self):
         #
-        global simplemma
-        if "simplemma" not in globals():
-            if self.verbose:
-                print("I need a lemmatization library. I'm executing 'import simplemma'.")
-            try:
-                import simplemma
-            except Exception as exc:
-                print("Error while importing the simplemma library.\nI cannot lemmatize the words.")
-                return dict({})
-        global pd
-        if "pd" not in globals():
-            if self.verbose:
-                print("I need pandas. I'm executing 'import pandas'.")
-            try:
-                import pandas as pd
-            except Exception as exc:
-                print("Error while importing the pandas library.\nI cannot lemmatize the words.")
-                return dict({})
+        if self.__import_simplemma():
+            return None
+        if self.__import_pandas():
+            return None
         #
         if self.__none_check(self.__text_counted):
             self.word_count()  
@@ -129,7 +147,7 @@ class text_analyzer:
             #
             words_list_lemmatized = []
             words_list_count = []
-            for i,word in enumerate(words_list):
+            for word in words_list:
                 words_list_lemmatized.append(simplemma.lemmatize(word, lang=self.language))
                 words_list_count.append(self.__text_lemmatized[word])
             #
@@ -157,9 +175,15 @@ class text_analyzer:
         #       
         return self.__text_lemma_counted 
     #
-    def word_count_print(self,word:str):
-        if type(word)!=str:
-            print("The word mut be a string")
+    def word_count_print(self,word:str = None):
+        if self.__none_check(word):
+            display(self.word_count())
         else:
-            print("The word '"+word+"' occurs",self.word_count(word),"times")
+            if type(word)!=str:
+                print("The word mut be a string.")
+            else:
+                print("The word '"+word+"' occurs",self.word_count(word),"times.")
     
+
+
+"pd" in globals()
