@@ -1,14 +1,21 @@
+#
+#
 def replace_dict_func(language : str = ""):
         if language.lower() == "it":
             return {"all":"al", "dell":"del", "l":"lo", "sull":"su","nell":"in"}
         else:
             return dict({})
-
-
+#
+#
 class text_analyzer:
     #    
+    #Initialization
     def __init__ (self, text : str, language : str = "it", verbose : bool = True):
+        #
+        #Initializing the hidden attributes
+        ##Read-only attribute
         self._text_raw = text
+        ##Read-write attribute
         self.verbose = verbose
         self.language = language
         global re
@@ -17,14 +24,16 @@ class text_analyzer:
                 print("I need the RegEx library. I'm executing 'import re'.")
             import re
         #
+        #Initializing the hidden attributes
         self.__text_processed         = None
         self.__text_splitted          = None #Needs __text_processed
         self.__text_counted           = None #Needs __text_splitted
         self.__text_counted_dataframe = None #Needs __text_splitted
         self.__text_lemmatized        = None #Needs __text_counted
         self.__text_lemma_counted     = None #Needs __text_lemmatized
+        self.__language_used          = '' 
     #
-    #Retrieve the raw text without allowng for changes
+    #Retrieve the raw text without allowing for changes
     @property
     def text_raw(self):
         return self._text
@@ -32,9 +41,11 @@ class text_analyzer:
     def text_raw(self, value):
         raise AttributeError("The raw test that is initialized is read-only and cannot be modified.")
     #
+    #A method to check if an attribute has already been defined
     def __none_check(self,variable):
         return type(variable) == type(None)
     #
+    #A function to import the simplemma library, only if it has not been importe before
     def __import_simplemma(self):
         global simplemma
         if "simplemma" not in globals():
@@ -47,6 +58,7 @@ class text_analyzer:
                 return True
         return False
     #
+    #A function to import the pandas library, only if it has not been importe before
     def __import_pandas(self):
         global pd
         if "pd" not in globals():
@@ -133,11 +145,19 @@ class text_analyzer:
         if self.__none_check(self.__text_counted):
             self.word_count()  
         #
-        if self.__none_check(self.__text_lemmatized):
+        language_check = (self.__language_used != self.language)
+        #
+        if self.__none_check(self.__text_lemmatized) or language_check:
             if self.verbose:
-                print("Please wait: "+"I am lemmatizing the text.") 
+                if not language_check:
+                    print("Please wait: "+"I am lemmatizing the text.") 
+                else:
+                    print("Please wait: "+"I am lemmatizing again the text with the new language.") 
+            #
             self.__text_lemmatized = dict(self.__text_counted)
             words_list = self.__text_lemmatized.keys()
+            #
+            self.__language_used = self.language
             #
             repl_dict = replace_dict_func(self.language)
             if repl_dict != dict({}):
@@ -161,7 +181,7 @@ class text_analyzer:
     #   
     def lemma_count(self):
         #
-        if self.__none_check(self.__text_lemmatized):
+        if self.__none_check(self.__text_lemmatized) or self.__language_used != self.language:
             self.lemmatize(self, self.language)
         #
         if self.__none_check(self.__text_lemma_counted):
