@@ -84,6 +84,7 @@ class text_analyzer:
                 return True
         return False
     #
+    #A method to process the text and remove punctuation
     def text_process(self):
         #
         if self.__none_check(self.__text_processed):
@@ -109,6 +110,7 @@ class text_analyzer:
             #
         return self.__text_processed
     #
+    #A method to split the words
     def words_split(self):
         if self.__none_check(self.__text_processed):
             self.text_process()
@@ -122,6 +124,7 @@ class text_analyzer:
         #
         return self.__text_splitted
     #   
+    #A method to count the words
     def word_count(self,key_word = None, *, dict = False): 
         #
         if self.__import_pandas():
@@ -150,7 +153,25 @@ class text_analyzer:
                 return self.__text_counted[key_word]
             else:
                 return 0
-    #        
+    #
+    #A method to automatically detect the language
+    def language_detect(self):
+        max_score = 0.0
+        language_guess = ''
+        threshold = 3*(10**3)
+        text_length = min(threshold, len(self._text_raw))
+        for my_lang in self._languages:
+            
+            score = simplemma.in_target_language(self._text_raw[0:text_length], lang = my_lang)
+            if score>max_score:
+                max_score = score
+                language_guess = my_lang
+        if self.verbose:
+            print(f"The language detected is {language_guess}, with confidence {max_score} (between 0 and 1).")
+        self.language = language_guess
+        return (language_guess,max_score)
+    #
+    #A method to lemmatize the text
     def lemmatize(self):
         #
         if self.__import_simplemma():
@@ -164,18 +185,8 @@ class text_analyzer:
         if type(self.language)==type(None):
             if self.verbose:
                 print("WARNING: no language is specified, I'll try to detect the language.")
-            max_score = 0.0
-            language_guess = ''
-            text_length = min(3*(10**3), len(self._text_raw))
-            for my_lang in self._languages:
-                
-                score = simplemma.in_target_language(self._text_raw[0:text_length], lang = my_lang)
-                if score>max_score:
-                    max_score = score
-                    language_guess = my_lang
-            print(f"WARNING: the language detected is {language_guess}, with confidence {max_score} (between 0 and 1)")
-            self.language = language_guess
-            self.__language_used = language_guess
+            self.language_detect(self)
+            self.__language_used = self.language
         #
         language_check = (self.__language_used != self.language)
         #
@@ -211,6 +222,7 @@ class text_analyzer:
         #
         return self.__text_lemmatized    
     #   
+    #A method to count the lemmas
     def lemma_count(self):
         #
         if self.__none_check(self.__text_lemmatized) or self.__language_used != self.language:
