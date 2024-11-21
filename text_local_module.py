@@ -21,7 +21,7 @@ class text_analyzer:
         global re
         if "re" not in globals():
             if self.verbose:
-                print("I need the RegEx library. I'm executing 'import re'.")
+                print("WARNING: I need the RegEx library. I'm executing 'import re'.")
             import re
         #
         #Initializing the hidden attributes
@@ -63,7 +63,7 @@ class text_analyzer:
         global simplemma
         if "simplemma" not in globals():
             if self.verbose:
-                print("I need a lemmatization library. I'm executing 'import simplemma'.")
+                print("WARNING: I need a lemmatization library. I'm executing 'import simplemma'.")
             try:
                 import simplemma
             except Exception as exc:
@@ -76,7 +76,7 @@ class text_analyzer:
         global pd
         if "pd" not in globals():
             if self.verbose:
-                print("I need pandas. I'm executing 'import pandas as pd'.")
+                print("WARNING: I need pandas. I'm executing 'import pandas as pd'.")
             try:
                 import pandas as pd
             except Exception as exc:
@@ -156,6 +156,8 @@ class text_analyzer:
     #
     #A method to automatically detect the language
     def language_detect(self):
+        if self.__import_simplemma():
+            return None
         max_score = 0.0
         language_guess = ''
         threshold = 3*(10**3)
