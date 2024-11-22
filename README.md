@@ -104,23 +104,24 @@ analyzer = text_analyzer("Sample text goes here.")
 analyzer.language_detect()
 lemma_df = analyzer.lemmatize()
 ```
+ 
 
----
-
-# Notebook: `lemma_count.ipynb`
+## Notebook: `lemma_count.ipynb`
 
 The Jupyter Notebook demonstrates how to integrate the modules for text analysis. It guides the user through:
 1. Importing and using `pdf_local_module` to extract text from a PDF.
 2. Analyzing the text with `text_local_module` to perform tokenization, lemmatization, and counting.
+
+It also allow the user to create a test pdf with dummy words, to test the modules.
 
 **Usage Example**:
 - Load a PDF using `pdf_analyzer`.
 - Extract text and analyze it using `text_analyzer`.
 - Generate lemma counts and visualize results.
 
----
+ 
 
-# References
+## References
 
 For additional details, refer to:
 - `pypdf` Documentation**: [pypdf](https://pypi.org/project/pypdf/)
