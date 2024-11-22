@@ -23,27 +23,27 @@ The **`pdf_local_module`** provides a class `pdf_analyzer` to facilitate text ex
 
 #### Initialization
 
-```python
+(START CODE)
 pdf_analyzer(path: str, verbose: bool = True)
-```
+(END CODE)
 
--
--
+- **`path`**: Path to the PDF file.
+- **`verbose`**: Flag for logging messages during initialization and operations.
 
 Upon initialization:
 - The PDF file is read using `pypdf`.
 - Metadata, such as the number of pages, is stored.
 
-### Properties
+#### Properties
 
 - **`file_path`** *(read-only)*: Path to the input PDF file.
 - **`n_pages`** *(read-only)*: Total number of pages in the document.
 
-### Method: `extract`
+#### Method: `extract`
 
-```python
+(START CODE)
 extract(i_start=None, j_end=None, *, force=False, merge=False)
-```
+(END CODE)
 
 - **`i_start`**, **`j_end`**: Indices (1-based) for page extraction. If omitted, extracts all pages.
 - **`force`**: Forces re-extraction of pages even if already cached.
@@ -52,15 +52,18 @@ extract(i_start=None, j_end=None, *, force=False, merge=False)
 **Returns**:
 - List of extracted text (default) or a single merged string (if `merge=True`).
 
-**Example**:
-```python
+Example:
+
+(START CODE)
 analyzer = pdf_analyzer("example.pdf")
 text = analyzer.extract(1, 3, merge=True)
-```
+(END CODE)
 
 ---
 
-### Overview of `text_local_module`
+# Module: `text_local_module`
+
+### Overview
 
 The **`text_local_module`** provides a class `text_analyzer` for processing and analyzing text. It supports:
 1. Text cleaning and tokenization.
@@ -72,9 +75,9 @@ The **`text_local_module`** provides a class `text_analyzer` for processing and 
 
 #### Initialization
 
-```python
+(START CODE)
 text_analyzer(text: str, language=None, *, verbose: bool = True)
-```
+(END CODE)
 
 - **`text`**: Raw text for analysis.
 - **`language`**: Optional language specifier for lemmatization. Auto-detection if omitted.
@@ -99,11 +102,34 @@ text_analyzer(text: str, language=None, *, verbose: bool = True)
 6. **`lemma_count`**:
    - Aggregates and counts unique lemmas, returning a DataFrame.
 
-**Example**:
-```python
+Example:
+
+(START CODE)
 analyzer = text_analyzer("Sample text goes here.")
 analyzer.language_detect()
 lemmas = analyzer.lemmatize()
-```
+(END CODE)
+
+---
+
+# Notebook: `lemma_count.ipynb`
+
+The Jupyter Notebook demonstrates how to integrate the modules for text analysis. It guides the user through:
+1. Importing and using `pdf_local_module` to extract text from a PDF.
+2. Analyzing the text with `text_local_module` to perform tokenization, lemmatization, and counting.
+
+**Usage Example**:
+- Load a PDF using `pdf_analyzer`.
+- Extract text and analyze it using `text_analyzer`.
+- Generate lemma counts and visualize results.
+
+---
+
+# References
+
+For additional details, refer to:
+- **`pypdf` Documentation**: [pypdf](https://pypi.org/project/pypdf/)
+- **`simplemma` Documentation**: [simplemma](https://github.com/adbar/simplemma)
+- **`pandas` Documentation**: [pandas](https://pandas.pydata.org/)
 
 
