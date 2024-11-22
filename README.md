@@ -84,7 +84,7 @@ Upon initialization the raw text is stored and can be accessed using:
 #### Key Methods
 
 1. `text_process()`: This method cleans and normalizes the text (e.g., removes punctuation).
-2. `words_split()`: This method splits text into tokens.
+2. `word_split()`: This method splits text into tokens.
 3. `word_count(key_word = None, *, dict = False)`:
    - It counts occurrences of each word if no argument `key_word` is provided. Otherwise, it counts the occurrence of only that specific word `key_word`.
    - It returns the results as either a dictionary (if `dict = True`) or a `pandas` DataFrame (if `dict = False`).
