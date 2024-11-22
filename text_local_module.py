@@ -44,7 +44,7 @@ class text_analyzer:
         return self._text_raw
     @text_raw.setter
     def text_raw(self, value):
-        raise AttributeError("WARNING: The initial raw test is read-only and cannot be modified.")
+        raise AttributeError("WARNING: The initial raw text is read-only and cannot be modified.")
     #
     #Retrieve the list of available languages
     @property
@@ -243,7 +243,7 @@ class text_analyzer:
     #
     def word_count_print(self,word:str = None):
         if self.__none_check(word):
-            display(self.word_count())
+            self.word_count()
         else:
             if type(word)!=str:
                 print("WARNING: The word mut be a string.")
