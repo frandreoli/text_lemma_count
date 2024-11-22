@@ -39,7 +39,7 @@ Upon initialization the PDF file is read using `pypdf` and some metadata are sto
 extract(i_start=None, j_end=None, *, force=False, merge=False)
 ```
 
-- `i_start`, `j_end`: Indices (1-based) for page extraction. If only the starting index `i_start` is provided, only one page is extracted, corresponding to its value. If both are omitted, the code extracts all pages. Moreover, `j_end` can take negative indexing, to count backwards from the last page (i.e. -1). Finally, is specific pages are needed for the extraction, one can feed the method with such a list of pages, e.g. `extract([1,6,8])`.
+- `i_start`, `j_end`: Indices (1-based) for page extraction. If only the starting index `i_start` is provided, only one page is extracted, corresponding to its value. If both are omitted, the code extracts all pages. Moreover, `j_end` can take negative indexing, to count backwards from the last page (i.e. -1). Finally, if specific pages are needed for the extraction, one can feed the method with such a list of pages, e.g. `extract([1,6,8])`.
 - `force`: If `True`, it forces re-extraction of pages even if they were already cached. Otherwise, cached pages are not extracted twice.
 - `merge`: If `True`, it combines extracted pages into a single text string, which is returned as outcome. Otherwise, the outcome is a list of text strings, each corresponding to one extracted page.
  
