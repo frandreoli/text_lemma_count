@@ -1,69 +1,62 @@
 # Introduction
 
-This project consists of two Python modules and a Jupyter Notebook designed to process text extracted from PDF files. The workflow involves importing and reading text from PDFs, analyzing the text, and counting word lemmas. The provided modules ensure flexibility, modularity, and compatibility with popular Python libraries such as `pypdf`, `pandas`, and `simplemma`.
+This project consists of two Python modules and a Jupyter Notebook designed to process text extracted from PDF files. The code allows to import and read text from PDFs, to then analyze the text and count word lemmas. The provided modules rely on popular Python libraries such as `pypdf`, `pandas`, and `simplemma`.
 
 ## Overview of the problem
 
-Automated text analysis from PDFs often involves challenges such as:
+To design an automated text analysis from PDFs, we addressed the following checklist:
 1. Extracting structured text efficiently from multi-page documents.
 2. Processing and analyzing the text, including tokenization, lemmatization, and counting unique lemmas.
 3. Handling diverse languages and noisy data with modular design.
 
-The two modules, **`pdf_local_module`** and **`text_local_module`**, address these challenges. The workflow is exemplified in the accompanying Jupyter Notebook, enabling on-the-spot exploration and integration.
+These points are accomplished via the two modules, **`pdf_local_module`** and **`text_local_module`**, whose workflow is exemplified in an accompanying Jupyter Notebook, which can be directly used.
 
----
+ 
+## Module: `pdf_local_module`
 
-# Module: `pdf_local_module`
 
-### Overview
 
 The **`pdf_local_module`** provides a class `pdf_analyzer` to facilitate text extraction from PDF files. It uses the `pypdf` library for reading and processing the documents.
 
-### Class: `pdf_analyzer`
+### Initialization
 
-#### Initialization
+The `pdf_analyzer` object can be initialized as follows:
 
-(START CODE)
-pdf_analyzer(path: str, verbose: bool = True)
-(END CODE)
+```python
+pdf_analyzer(path: str, *, verbose: bool = True)
+```
 
-- **`path`**: Path to the PDF file.
-- **`verbose`**: Flag for logging messages during initialization and operations.
+The relevent arguments of the class are given by:
+- **`path`**: It defines the path to the PDF file.
+- **`verbose`**: An optional keyword variable which encodes an optional flag for logging messages during initialization and operations.
 
-Upon initialization:
-- The PDF file is read using `pypdf`.
-- Metadata, such as the number of pages, is stored.
-
-#### Properties
+Upon initialization the PDF file is read using `pypdf` and some metadata are stored, which can be retrieved via the attributes:
 
 - **`file_path`** *(read-only)*: Path to the input PDF file.
 - **`n_pages`** *(read-only)*: Total number of pages in the document.
 
-#### Method: `extract`
+### Method: `extract`
 
-(START CODE)
+```python
 extract(i_start=None, j_end=None, *, force=False, merge=False)
-(END CODE)
+```
 
-- **`i_start`**, **`j_end`**: Indices (1-based) for page extraction. If omitted, extracts all pages.
-- **`force`**: Forces re-extraction of pages even if already cached.
-- **`merge`**: Combines extracted pages into a single text string.
-
-**Returns**:
-- List of extracted text (default) or a single merged string (if `merge=True`).
+- **`i_start`**, **`j_end`**: Indices (1-based) for page extraction. If only the starting index `i_start` is provided, only one page is extracted, corresponding to its value. If both are omitted, the code extracts all pages. Moreover, `j_end` can take negative indexing, to count backwards from the last page (i.e. -1). Finally, is specific pages are needed for the extraction, one can feed the method with such a list of pages, e.g. `extract([1,6,8])`.
+- **`force`**: If `True`, it forces re-extraction of pages even if they were already cached. Otherwise, cached pages are not extracted twice.
+- **`merge`**: If `True`, it combines extracted pages into a single text string, which is returned as outcome. Otherwise, the outcome is a list of text strings, each corresponding to one extracted page.
+ 
+The method returns either a list of page-wise extracted text (default), or a single merged string (if `merge=True`).
 
 Example:
 
-(START CODE)
+```python
 analyzer = pdf_analyzer("example.pdf")
 text = analyzer.extract(1, 3, merge=True)
-(END CODE)
+```
+ 
 
----
+## Module: `text_local_module`
 
-# Module: `text_local_module`
-
-### Overview
 
 The **`text_local_module`** provides a class `text_analyzer` for processing and analyzing text. It supports:
 1. Text cleaning and tokenization.
@@ -71,15 +64,17 @@ The **`text_local_module`** provides a class `text_analyzer` for processing and 
 3. Lemmatization.
 4. Word and lemma counting.
 
-### Class: `text_analyzer`
+### Initialization
 
-#### Initialization
+The `text_analyzer` object can be initialized as follows:
 
-(START CODE)
+```python
 text_analyzer(text: str, language=None, *, verbose: bool = True)
-(END CODE)
+```
 
-- **`text`**: Raw text for analysis.
+The relevent arguments of the class are given by:
+
+- **`text`**: Raw text that must be analyzed.
 - **`language`**: Optional language specifier for lemmatization. Auto-detection if omitted.
 - **`verbose`**: Logs messages during processing.
 
@@ -104,11 +99,11 @@ text_analyzer(text: str, language=None, *, verbose: bool = True)
 
 Example:
 
-(START CODE)
+```python
 analyzer = text_analyzer("Sample text goes here.")
 analyzer.language_detect()
 lemmas = analyzer.lemmatize()
-(END CODE)
+```
 
 ---
 
