@@ -124,8 +124,8 @@ It also allow the user to create a test pdf with dummy words, to test the module
 ## References
 
 For additional details, refer to:
-- `pypdf` Documentation**: [pypdf](https://pypi.org/project/pypdf/)
-- `simplemma` Documentation**: [simplemma](https://github.com/adbar/simplemma)
-- `pandas` Documentation**: [pandas](https://pandas.pydata.org/)
+- `pypdf` **Documentation**: [pypdf](https://pypi.org/project/pypdf/)
+- `simplemma` **Documentation**: [simplemma](https://github.com/adbar/simplemma)
+- `pandas` **Documentation**: [pandas](https://pandas.pydata.org/)
 
 
