@@ -111,7 +111,7 @@ class text_analyzer:
         return self.__text_processed
     #
     #A method to split the words
-    def words_split(self):
+    def word_split(self):
         if self.__none_check(self.__text_processed):
             self.text_process()
         #
@@ -131,7 +131,7 @@ class text_analyzer:
             return None
         #
         if self.__none_check(self.__text_splitted):
-            self.words_split()
+            self.word_split()
         # 
         if self.__none_check(self.__text_counted):
             if self.verbose: 
