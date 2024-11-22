@@ -83,24 +83,26 @@ Upon initialization the raw text is stored and can be accessed using:
 
 #### Key Methods
 
-1. `text_process`: This method cleans and normalizes the text (e.g., removes punctuation).
-2. `words_split`: This method splits text into tokens.
+1. `text_process()`: This method cleans and normalizes the text (e.g., removes punctuation).
+2. `words_split()`: This method splits text into tokens.
 3. `word_count(key_word = None, *, dict = False)`:
-   - It counts occurrences of each word if no argument `key_word` is provided. Otherwise, it counts the occurrence of only that specific word.
+   - It counts occurrences of each word if no argument `key_word` is provided. Otherwise, it counts the occurrence of only that specific word `key_word`.
    - It returns the results as either a dictionary (if `dict = True`) or a `pandas` DataFrame (if `dict = False`).
-4. `language_detect`:
+4. `language_detect()`:
    - It attempts to automatically detects the language of the input text. When this is done, the attribute `.language` is automatically updated with the language found. The method then returns a tuple with the language code, and a confidence value (between 0 and 1).
-5. `lemmatize`:
-   - Lemmatizes the words and returns a DataFrame with raw words, lemmas, and counts.
-6. `lemma_count`:
-   - Aggregates and counts unique lemmas, returning a DataFrame.
+5. `lemmatize()`:
+   - Lemmatizes the words and returns a DataFrame with: raw words, their respective lemma, and the counts of that raw word.
+6. `lemma_count()`:
+   - Aggregates and counts unique lemmas, returning a DataFrame with: each lemma, the counts of that lemma, a list with all the different occurrences of that lemma in the text.
+
+The method do not have to be executed in order, meaning that one can directly execute (for example) `lemma_count()` right after the initialization.
 
 Example:
 
 ```python
 analyzer = text_analyzer("Sample text goes here.")
 analyzer.language_detect()
-lemmas = analyzer.lemmatize()
+lemma_df = analyzer.lemmatize()
 ```
 
 ---
