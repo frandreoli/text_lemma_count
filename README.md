@@ -9,12 +9,10 @@ To design an automated text analysis from PDFs, we addressed the following check
 2. Processing and analyzing the text, including tokenization, lemmatization, and counting unique lemmas.
 3. Handling diverse languages and noisy data with modular design.
 
-These points are accomplished via the two modules, `pdf_local_module` and `text_local_module`, whose workflow is exemplified in an accompanying Jupyter Notebook, which can be directly used.
+These points are accomplished via the two modules, `pdf_local_module` and `text_local_module`, which can be directly used inside the Jupyter Notebook that is provided in the repository.
 
  
 ## Module: `pdf_local_module`
-
-
 
 The `pdf_local_module` provides a class `pdf_analyzer` to facilitate text extraction from PDF files. It uses the `pypdf` library for reading and processing the documents.
 
@@ -27,8 +25,8 @@ pdf_analyzer(path: str, *, verbose: bool = True)
 ```
 
 The relevent arguments of the class are given by:
-- `path`: It defines the path to the PDF file.
-- `verbose`: An optional keyword variable which encodes an optional flag for logging messages during initialization and operations.
+- `path`: The path to the PDF file.
+- `verbose`: An optional flag for logging messages during initialization and operations.
 
 Upon initialization the PDF file is read using `pypdf` and some metadata are stored, which can be retrieved via the attributes:
 
@@ -74,24 +72,24 @@ text_analyzer(text: str, language=None, *, verbose: bool = True)
 
 The relevent arguments of the class are given by:
 
-- `text`: Raw text that must be analyzed.
-- `language`: Optional language specifier for lemmatization. Auto-detection if omitted.
-- `verbose`: Logs messages during processing.
+- `text`: The raw text that must be analyzed.
+- `language`: An optional language specifier for lemmatization. Auto-detection if omitted.
+- `verbose`: An optional flag for logging messages during initialization and operations.
 
-#### Properties
+Upon initialization the raw text is stored and can be accessed using:
 
 - `text_raw` *(read-only)*: Original input text.
-- `languages` *(read-only)*: List of supported languages.
+- `languages` *(read-only)*: Overall list of supported languages for lemmatization.
 
 #### Key Methods
 
-1. `text_process`: Cleans and normalizes text (e.g., removes punctuation).
-2. `words_split`: Splits text into tokens.
-3. `word_count`:
-   - Counts occurrences of each word.
-   - Returns results as a dictionary or `pandas` DataFrame.
+1. `text_process`: This method cleans and normalizes the text (e.g., removes punctuation).
+2. `words_split`: This method splits text into tokens.
+3. `word_count(key_word = None, *, dict = False)`:
+   - It counts occurrences of each word if no argument `key_word` is provided. Otherwise, it counts the occurrence of only that specific word.
+   - It returns the results as either a dictionary (if `dict = True`) or a `pandas` DataFrame (if `dict = False`).
 4. `language_detect`:
-   - Detects the language of the input text.
+   - It attempts to automatically detects the language of the input text. When this is done, the attribute `.language` is automatically updated with the language found. The method then returns a tuple with the language code, and a confidence value (between 0 and 1).
 5. `lemmatize`:
    - Lemmatizes the words and returns a DataFrame with raw words, lemmas, and counts.
 6. `lemma_count`:
