@@ -2,7 +2,7 @@
 class pdf_analyzer:
     #
     #Initialization
-    def __init__ (self,path : str, verbose : bool = True):
+    def __init__ (self,path : str, *,verbose : bool = True):
         self._file_path = path
         self.verbose = verbose
         global pypdf
