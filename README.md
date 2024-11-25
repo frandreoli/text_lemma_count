@@ -14,7 +14,7 @@ These points are accomplished via the two modules, `pdf_local_module` and `text_
  
 ## Module: `pdf_local_module`
 
-The `pdf_local_module` provides a class `pdf_analyzer` to facilitate text extraction from PDF files. It uses the `pypdf` library for reading and processing the documents.
+The `pdf_local_module` provides a class `pdf_analyzer` to facilitate text extraction from PDF files. It uses the `pypdf` library to read and process the documents.
 
 ### Initialization
 
