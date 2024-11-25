@@ -95,7 +95,7 @@ Upon initialization the raw text is stored and can be accessed using:
 6. `lemma_count()`:
    - Aggregates and counts unique lemmas, returning a DataFrame with: each lemma, the counts of that lemma, a list with all the different occurrences of that lemma in the text.
 
-The method do not have to be executed in order, meaning that one can directly execute (for example) `lemma_count()` right after the initialization.
+The methods do not have to be executed in order, meaning that one can directly execute (for example) `lemma_count()` right after the initialization.
 
 Example:
 
